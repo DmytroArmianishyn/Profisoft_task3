@@ -16,6 +16,7 @@ function Card({
   children,
   disablePaddings = false,
   variant = variants.paper,
+ flexDirection = 'column'
 }) {
   const { theme } = useTheme();
   return (
@@ -24,7 +25,7 @@ function Card({
         background: customBackground || theme.card.color.background[variant],
         borderRadius: '0px',
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection: flexDirection,
         gap: `${theme.spacing(2)}px`,
         padding: disablePaddings
           ? 'none'
