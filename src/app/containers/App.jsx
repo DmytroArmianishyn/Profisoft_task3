@@ -26,6 +26,7 @@ import IntlProvider from '../components/IntlProvider';
 import MissedPage from '../components/MissedPage';
 import SearchParamsConfigurator from '../components/SearchParamsConfigurator';
 import PlayersPage from "pageProviders/Players";
+import PlayerInf from "../../pageProviders/PlayerInf";
 
 function App() {
   const dispatch = useDispatch();
@@ -83,6 +84,11 @@ function App() {
                     <Route
                       element={<SecretPage />}
                       path={`${pageURLs[pages.secretPage]}`}
+                      />
+                    <Route
+                        element={<PlayerInf />}
+                        path={`${pageURLs[pages.playerInfPage]}`}
+                    />
                     />
                     <Route
                       element={(

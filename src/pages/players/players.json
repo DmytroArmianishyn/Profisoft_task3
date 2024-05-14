@@ -22,11 +22,5 @@
     "position": "Guard",
     "age": 25,
     "team_id": 1
-  },
-  {
-    "name": "Devin Booker",
-    "position": "Guard",
-    "age": 25,
-    "team_id": 1
   }
 ]

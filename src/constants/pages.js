@@ -3,3 +3,5 @@ export const login = 'login';
 export const secretPage = 'secret';
 
 export const playersPage = 'players';
+
+export const playerInfPage = 'playerinf';

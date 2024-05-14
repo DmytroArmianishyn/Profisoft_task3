@@ -1,12 +1,12 @@
 const commonColors = {
   text: {
-    primary: '#027f0b',
+    primary: '#d96700',
     primaryContrast: '#fffefa',
-    primaryHeader: '#16bb00',
+    primaryHeader: '#ff8100',
     secondary: '#60a374',
-    secondaryHeader: '#00ff1a',
+    secondaryHeader: '#ff8100',
     tertiary: '#20bf49',
-    tertiaryHeader: '#14c900',
+    tertiaryHeader: '#ff8100',
     error: '#D3000C',
     info: '#1C7FDB',
     success: '#007504',
@@ -14,7 +14,7 @@ const commonColors = {
   },
   background: {
     primary: '#2d2d2b',
-    primaryHeader: '#161616',
+    primaryHeader: '#1e0470',
     secondary: '#e6e6e6',
     secondaryHeader: '#ddc8a7',
     tertiary: '#ddc8a7',
