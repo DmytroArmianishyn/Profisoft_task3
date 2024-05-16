@@ -68,7 +68,9 @@ function Players() {
                 Ви впевнені, що хочете видалити цього гравця?
             </Modal>
             {message && <div style={{ color: 'green', marginTop: '10px' }}>{message}</div>}
+            ds
         </>
+
     );
 }
 
