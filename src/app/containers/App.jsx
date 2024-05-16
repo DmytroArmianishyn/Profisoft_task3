@@ -27,13 +27,20 @@ import MissedPage from '../components/MissedPage';
 import SearchParamsConfigurator from '../components/SearchParamsConfigurator';
 import PlayersPage from "pageProviders/Players";
 import PlayerInf from "../../pageProviders/PlayerInf";
+import ModalComponent from "../../components/ModalPlayer/ModalPlayer";
+
 
 function App() {
   const dispatch = useDispatch();
   const [state, setState] = useState({
     componentDidMount: false,
   });
-
+  const [players, setPlayers] = useState(function ()
+      {
+        const storeValue = localStorage.getItem("players")
+        return JSON.parse(storeValue)
+      }
+  );
   const {
     errors,
     isFailedSignIn,
@@ -42,6 +49,13 @@ function App() {
     isFetchingSignUp,
     isFetchingUser,
   } = useSelector(({ user }) => user);
+  const [player, setPlayer] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handlePlayerClick = (clickedPlayer) => {
+    setPlayer(clickedPlayer);
+    setIsModalOpen(true);
+  };
 
   useEffect(() => {
     addAxiosInterceptors({
@@ -53,93 +67,116 @@ function App() {
       componentDidMount: true,
     });
   }, []);
+  useEffect(() => {
+    if (players.length === 0) {
+      const defaultPlayers = [
+        { id: 1, name: 'Kevin Durant ', position: 'Small Forward',age: '34' , team:'Phoenix Suns', titles:'2'},
+        { id: 2, name: 'Devin Booker', position: 'Point Guard',age: '28' , team:'Phoenix Suns', titles:'0'},
+        { id: 3, name: 'Anthony Edwards', position: 'Point Guard',age: '23' , team:'Minnesota Timberwolves', titles:'0'},
+        { id: 4, name: 'Lebron James', position: 'Small Forward',age: '39', team:'Los Angelos Lakers', titles:'4' }
+      ];
+      setPlayers(defaultPlayers);
+      localStorage.setItem('players', JSON.stringify(defaultPlayers));
+    } else {
+      localStorage.setItem('players', JSON.stringify(players));
+    }
+  }, [players]);
 
   return (
-    <UserProvider>
-      <AuthoritiesProvider>
-        <ThemeProvider>
-          <BrowserRouter>
-            <SearchParamsConfigurator />
-            {/* This is needed to let first render passed for App's
+      <UserProvider>
+        <AuthoritiesProvider>
+          <ThemeProvider>
+            <BrowserRouter>
+              <SearchParamsConfigurator />
+              {/* This is needed to let first render passed for App's
               * configuration process will be finished (e.g. locationQuery
               * initializing) */}
-            {state.componentDidMount && (
-              <IntlProvider>
-                <Header onLogout={() => dispatch(actionsUser.fetchSignOut())} />
-                {isFetchingUser && (
-                  <PageContainer>
-                    <Loading />
-                  </PageContainer>
-                )}
-                {!isFetchingUser && (
-                  <Routes>
-                    <Route
-                      element={<DefaultPage />}
-                      path={`${pageURLs[pages.defaultPage]}`}
-                    />
-                    <Route
-                        element={<PlayersPage />}
-                        path={`${pageURLs[pages.playersPage]}`}
-                    />
-                    <Route
-                      element={<SecretPage />}
-                      path={`${pageURLs[pages.secretPage]}`}
-                      />
-                    <Route
-                        element={<PlayerInf />}
-                        path={`${pageURLs[pages.playerInfPage]}`}
-                    />
-                    />
-                    <Route
-                      element={(
-                        <LoginPage
-                          errors={errors}
-                          isFailedSignIn={isFailedSignIn}
-                          isFailedSignUp={isFailedSignUp}
-                          isFetchingSignIn={isFetchingSignIn}
-                          isFetchingSignUp={isFetchingSignUp}
-                          onSignIn={({
-                            email,
-                            login,
-                            password,
-                          }) => dispatch(actionsUser.fetchSignIn({
-                            email,
-                            login,
-                            password,
-                          }))}
-                          onSignUp={({
-                            email,
-                            firstName,
-                            lastName,
-                            login,
-                            password,
-                          }) => dispatch(actionsUser.fetchSignUp({
-                            email,
-                            firstName,
-                            lastName,
-                            login,
-                            password,
-                          }))}
-                        />
-                      )}
-                      path={`${pageURLs[pages.login]}`}
-                    />
-                    <Route
-                      element={(
-                        <MissedPage
-                          redirectPage={`${pageURLs[pages.defaultPage]}`}
-                        />
-                      )}
-                      path="*"
-                    />
-                  </Routes>
-                )}
-              </IntlProvider>
+              {state.componentDidMount && (
+                  <IntlProvider>
+                    <Header onLogout={() => dispatch(actionsUser.fetchSignOut())} />
+                    {isFetchingUser && (
+                        <PageContainer>
+                          <Loading />
+                        </PageContainer>
+                    )}
+                    {!isFetchingUser && (
+                        <Routes>
+                          <Route
+                              element={<DefaultPage />}
+                              path={`${pageURLs[pages.defaultPage]}`}
+                          />
+                          <Route
+                              element={<PlayersPage
+                                  players={players}
+                                  setPlayers={setPlayers}
+                                  setPlayer={setPlayer}
+                                  onPlayerClick={handlePlayerClick} // Pass handlePlayerClick function as prop
+                              />}
+                              path={`${pageURLs[pages.playersPage]}`}
+                          />
+                          <Route
+                              element={<SecretPage />}
+                              path={`${pageURLs[pages.secretPage]}`}
+                          />
+
+                          <Route
+                              element={<PlayerInf players={players} setPlayers={setPlayers} />}
+                              path={`${pageURLs[pages.playerInfPage]}`}
+                          />
+                          />
+                          <Route
+                              element={(
+                                  <LoginPage
+                                      errors={errors}
+                                      isFailedSignIn={isFailedSignIn}
+                                      isFailedSignUp={isFailedSignUp}
+                                      isFetchingSignIn={isFetchingSignIn}
+                                      isFetchingSignUp={isFetchingSignUp}
+                                      onSignIn={({
+                                                   email,
+                                                   login,
+                                                   password,
+                                                 }) => dispatch(actionsUser.fetchSignIn({
+                                        email,
+                                        login,
+                                        password,
+                                      }))}
+                                      onSignUp={({
+                                                   email,
+                                                   firstName,
+                                                   lastName,
+                                                   login,
+                                                   password,
+                                                 }) => dispatch(actionsUser.fetchSignUp({
+                                        email,
+                                        firstName,
+                                        lastName,
+                                        login,
+                                        password,
+                                      }))}
+                                  />
+                              )}
+                              path={`${pageURLs[pages.login]}`}
+                          />
+                          <Route
+                              element={(
+                                  <MissedPage
+                                      redirectPage={`${pageURLs[pages.defaultPage]}`}
+                                  />
+                              )}
+                              path="*"
+                          />
+                        </Routes>
+                    )}
+                  </IntlProvider>
+              )}
+            </BrowserRouter>
+            {isModalOpen && (
+                <ModalComponent player={player} onClose={() => setIsModalOpen(false)} />
             )}
-          </BrowserRouter>
-        </ThemeProvider>
-      </AuthoritiesProvider>
-    </UserProvider>
+          </ThemeProvider>
+        </AuthoritiesProvider>
+      </UserProvider>
   );
 }
 

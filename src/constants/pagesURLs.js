@@ -8,6 +8,8 @@ const result = {
   [pages.playersPage]: `${config.UI_URL_PREFIX}/${pages.playersPage}`,
       [pages.playerInfPage]: `${config.UI_URL_PREFIX}/${pages.playerInfPage}`
 
+
+
 };
 
 export default result;
